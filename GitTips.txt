@@ -56,6 +56,9 @@ $ git log [params]
 Tutorial 2:
 Create and sync a GitHub repo
 
+Note: In case of "fatal: refusing to merge unrelated histories" when mergin with commits on both the master and the local projects that cannot be rebased, use
+$ $ git pull origin master --allow-unrelated-histories
+
 Create a repo in GitHub and then ->
 
 *Create a local repo (in case it doesn't exist yet)
@@ -75,7 +78,7 @@ master -> the actual branch we're pushing to the commits, could be the the maste
 $ git remote [params]
 -v the posible things to do in origin
 
-*To get the data without mergim it with a local copy yet
+*To get the data without mergin it with a local copy yet
 $ git fetch origin
 
 *To get the up to date proyect from the online repo is 
@@ -199,4 +202,3 @@ $ git remote add myorigin git@accountName:user/repo.git
 *BUT FIRST BE SURE TO BE ON THE SAME FOLDER OF THE REPO
 $ cd repoPath
 in case it shows a warning, just type yes
-
