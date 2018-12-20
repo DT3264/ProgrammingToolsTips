@@ -1,0 +1,202 @@
+Tutorial 1:
+Git add-commit-track stuff
+Note -> Exit from comand line editor with Q
+Note -> To use notepad instead vim on bash use
+$ alias notepad="/c/Program\ Files/Notepad++/notepad++.exe"
+so you can open files like
+$ notepad filePath
+Note -> Add new/untracked files
+$ git add -i
+Type a (for "add untracked"), then * (for "all"), then q (to quit) and you're done
+
+*(Only once) Add who adds each commit
+$ git config --global user.name "DT3264"
+$ git config --global user.email "cernadaniel32@gmail.com"
+
+*Create a new repo
+$ git init
+
+*Add a new file
+$ git add [params] filePath
+-f -> force add ignoring warnings
+
+*Delete file from repo/file system
+$ git rm [params] filePath
+-f -> force rm ignoring warnings
+--cached -> delete from the to_Commit files but keeps it in the file system
+*See diferences in repo files between commit and actual ones
+$ git diff
+
+*Remove from the repo only
+$ git reset HEAD filePath
+
+*Commit added files
+$ git commit [params]
+-a -> Auto add all diffs
+-m 'Commit comment' -> Insert commit's message directly in the terminal
+
+*Undo last commit in case you forgot something
+$ git commit --amend
+--amend -> Modify the last commit (aik this parameter should be executed exlusively alone)
+
+*See the status of (un)tracked files
+$ git status
+
+*Rename files
+$git mv actualFName newFName
+
+*See all commits
+$ git log [params]
+--pretty=oneline -> shows a minified version of the commits
+--pretty=format:"%h : %an : %ar : %s" -> like printf, params can be ignored ggg, h -> hash / an -> author / ar -> time from that commit / s -> commit
+-p -n -> -p is for file modifications -n is for the last n commits
+
+
+--------------------------
+Tutorial 2:
+Create and sync a GitHub repo
+
+Create a repo in GitHub and then ->
+
+*Create a local repo (in case it doesn't exist yet)
+$ git init
+
+*Add all the files in the directory (there's should be something, like a dummy or the readMe
+$ git add .
+
+*Set the online repo
+$ git remote add origin "Link_To_The_Repo"
+
+*Commit to the master repo (There's should be something to commit) / If it's first time it should request email and password
+$ git push -u origin master
+master -> the actual branch we're pushing to the commits, could be the the master branch or a custom branch
+
+*List remote urls (can show other branches)
+$ git remote [params]
+-v the posible things to do in origin
+
+*To get the data without mergim it with a local copy yet
+$ git fetch origin
+
+*To get the up to date proyect from the online repo is 
+$ git pull origin
+
+*To push the local modifications (after commited the files)
+$ git push
+
+*To rename the remote from origin is
+$ git remote rename origin newName
+
+--------------------------
+Tags
+
+*See the actual tags (like versions / version names)
+$ git tag
+
+*Give the last commit a tag (like to direct version update reference)
+$ git tag -a tagName [params]
+-m 'Comment' -> add the comment to that tag
+XXXXX -> First 5 hash chars (see git log) of the commit to tag in case it isn't the last commit
+
+*Show the commits in a tag
+$ git show tagName
+ 
+*Push tags (seen in the Releases tab)
+$ git push origin [params]
+tagName -> the tag to push to the repo
+--tags -> pushes all the tags to the repo
+:branchName
+
+--------------------------
+Aliases
+
+*Replace keywords(not only that(?), at the moment only one keyword per alias, cannot chain)
+ex. type cm instead commit
+$ git config --global alias.cm commit
+
+*Clone a repo
+git clone urlToClone
+
+--------------------------
+Tutorial 3
+Branching (A branch is like a sub-version of a project, like beta or alpha)
+The head is the actual branch we're working on like Master or Beta branch
+
+*Create / See / Delete branches
+$ git branch branchName
+branchName -> if not specified, it would show all
+--merged -> shows the merged branches
+--no-merged -> self explanatory
+-v -> shows the last commit on each branch
+-d branchToDelete -> delete a merged branch
+-D branchToDelete -> delete an unmerged branch
+
+*Moving to another branch
+$ git checkout [params] branchName
+-b -> creates the branch branchName and starts to work in there
+if no parameter is specified, it would asume the branch exist and would work there
+
+*Reflecting the changes to master branch
+$ git merge branchToMerge
+
+*Solving merge conflicts (a previous no merged version crashes with a new merged version)
+-Deleting the conflictive branch
+-Using mergetool
+$ git mergetool
+:diffget RE(mote) / BA(se) / LO(cal)
+$ rm conflictFile.orig
+
+--------------------------
+Update a branch to the up to date commits in master/other branch
+
+When the last local commit is lower than the actual one in the project we need to rebasing
+*Update our files with the up to date commits in the branch
+$ git rebase master
+master -> whichever other branch to get the up to date commits in the actual branch (like the Release fixes in the beta or alpha version)
+
+--------------------------
+Revert / Reset / Clean
+
+Revert -> Undoes a change in a commit committing it again with proff of an undo action
+$ git revert HEAD
+
+Reset -> (Not too recomended) Deletes a whole commit without proff of undo action
+$ git reset 
+--hard -> Don't give a fuck about what's going to happen
+XXXXX -> The 5 first chars of the previous commit of the commit we want to delete (deleting also the following commits to that)
+
+Clean -> Remove files from a directory
+$ git clean [params)
+-n -> the files that would be erased if clean gets executed
+-f -> removes untracked files
+-df -> removes untracked files and directories
+
+--------------------------
+Tutorial 4
+SSH Keys and multiple GH accounts
+
+
+$ ssh-keygen -t rsa -C "your@email"
+$ cd ~/.ssh/
+$ notepad nameOfSSH
+and paste each ssh in it's respective github account in Settings/SSH
+$ eval $(ssh-agent)
+$ ssh-add  ~/.ssh/theNameOfYourSSH
+then 
+$ cd ~/.ssh/
+$ touch config
+$ notepad config
+and type for each account the block beween /**/ ->
+/*
+Host accountName
+  HostName github.com
+  User git
+  IdentityFile ~/.ssh/sshFile
+*/
+
+and in bash reference to that account with
+$ git remote add myorigin git@accountName:user/repo.git
+*BUT FIRST BE SURE TO BE ON THE SAME FOLDER OF THE REPO
+$ cd repoPath
+in case it shows a warning, just type yes
+

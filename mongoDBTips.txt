@@ -1,0 +1,141 @@
+Begin:
+As messed javascript, we can create functions, pass parameters and return values
+ex.
+> function times2(n){ returnn*2; }
+> times2(3);
+> 6
+
+*Show databases
+> show dbs
+
+*See name of actual db
+> db
+
+*Change db (creates it if it doesn't exists)
+> use dbName
+
+*Create a document (a BSON object)
+> exampleObject = { 
+> "key" : "val",
+> "key" : 0,
+> "key" : new Date()
+> }
+
+*Add a document/object to the DB
+> db.dbName.insert(exampleObject)
+
+*Add multiple objects to the db
+> db.dbName.insert([obj1, obj2])
+
+*Select all in the db
+> db.test.find().pretty()
+
+*Add new element to an object
+> exampleObject.lettersInName = ['d', 'a', 'n', 'i']
+
+*Find elements in db -match keys-vals can be more than 1
+> db.dbName.find({"matchKey":"matchVal", "matchKey2":"matchVal2"})
+
+*Show or hide specific keys from objects -there must be explicit show or hide in case some things are still shown or hidden-
+> db.dbName.find({"matchKey":"matchVal"}, {"keyToShow": 1, "keyToHide" : 0})
+*Show all but only hide the _id
+> db.dbName.find({}, {"_id":0})
+**For elements inside other elements it's like
+> db.dbName.find({"matchKey":"matchVal"}, {"arrKey.subElementKey" : 1, "arrKey.anotherSubElementKey" : 0})
+
+*Find objects based on equality
+$gte(greater or equal that) / $gt(greater that) / $lte(less or equal that) / $lt(lower that) / $eq(equal to) / $ne(not equal to)
+> db.dbName.find({"score" : {"$gte" : 9.0, "$lte" : 9.5}})
+
+*Find objects based in parameters -to exclude the objects with values like the ones in the array is with $nin(not in)-
+> db.dbName.find({"score" : {"$in" : [9.0, 9.5, 10.0]}})
+
+*Find based on one of various criterias -the array of the or are the individual criterias-
+> db.dbName.find({"$or" : [{"key1":"valToMatch1"}, {"key2":"anotherValThatCouldMatch}])
+
+*Find by date -this would get all the matches that are after 2000, for some reason doesn't catch in between the year-
+> year2000 = new Date("01/01/2000")
+> db.dbName.find({"birth" : {"$gt" : year2000}}
+
+*Find values with wildcards
+> db.dbName.find({"key" : regexToMatch})
+
+*Find values that contains the value X in the keyArray
+> db.dbName.find({"keyArray" : N})
+
+*Find values that contains all the values X, Y, Z... in the keyArray
+> db.dbName.find({"keyArray" : {$all : [X, Y, Z]}})
+
+*Find the value N at the position X of an array inside an object
+> db.dbName.find({"keyArr.X" : N})
+
+*Find ojects with X elements in their keyArr
+> db.dbName.find({"keyArr" : {$size : X}})
+
+*Find objects with match inside a sub Array (example of a phone number)
+> db.dbName.find({"keyArr.subKey" : "XXX-XXX-XXXX"})
+
+*Retrieve N elements of an array -If N>0 it would take the first N elements; If n<0 it would take the last N elements-
+> db.dbName.find({"key" : "val"}, {"key" : {"$slice" : N}})
+
+*Retrieve N elements of an array after M -If N>0 it would take the first N elements; If n<0 it would take the last N elements-
+> db.dbName.find({"key" : "val"}, {"key" : {"$slice" : [M, N]}})
+
+*Limit results of a query by N
+> db.dbName.find().limit(n)
+
+*Skip the first N results
+> db.dbName.find().skip(n)
+
+*Sort by column/key
+> db.dbName.find().sort({"keyBaseToSort" : 1})
+
+*Update object -I guess we can update with more criteria adding more keys and vals between the brackets with comas-
+> exampleObject.key = val
+> db.dbName.update({"key" : "val"}, exampleObject)
+*Or with criteria from the inserted objects -this will only update the first match-
+> db.dbName.update({"key" : "oldVal"}, {$set:{"key" : "newVal"}})
+*To update all the matches, add {multi:true}
+> db.dbName.update({"key" : "oldVal"}, {$set:{"key" : "newVal"}}, {multi:true})
+
+*Increment stored values "$inc" (use negative values to decrement)
+> db.dbName.update({"key":"val"}, {"$inc":{"key":nToIncrement}})
+
+*Multiplicate stored values "$mul"
+> db.dbName.update({"key":"val"}, {"$mul":{"key":nToIncrement}})
+
+*Add more fields to the document "$push"
+> db.dbName.update({"key":"val"}, {"$push":{"newKey":"newVal", {"subKey1" : "subVal1", "subKey2" : "subVal2"}}})
+
+*Delete objects
+> db.dbName.remove({"key" : "val"})
+
+*Delete key in an object
+> db.testDB.update({"key":"val"}, {$unset:{"mainCharacter":1}} )
+
+*Delete key in all objects
+> db.testDB.updateMany({}, {$unset:{"keyToUnset":1}} )
+
+*Data types available
+null / 
+boolean / 
+float64 -all numbers, cannot change- / 
+strings / 
+arrays as ["a", 1, false] / 
+regex as {"key" : /[0-9]$/} (or any oother regex) /
+objects inside objects {"key" : {"key" : "val}} /
+Date and other functions -if date has no parameters, it return the actual datetime, or Date("DD/MM/YYYY")-
+
+*Variables
+> var = "x"
+> var = x;
+> var = new Date("YYYY");
+
+*See general help or specific help with
+> help
+> db.dbName.funName().help()
+
+*Load external scripts and functions (should be in the folder where the mongod got executed
+> load('jsName')
+> funcFromJsName()
+-the file that executes every time you use the shell is "c:\User\UserName\.mongorc.js" or "User\.mongorc.js
