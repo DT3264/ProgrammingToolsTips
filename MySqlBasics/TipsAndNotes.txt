@@ -1,0 +1,52 @@
+Tips and notes:
+
+*"Commands out of sync; you can't run this command now" -> PHP
+Print the mysql error (surely there is but php is so clever that it does not show it)
+if appears "Commands out of sync; you can't run this command now" 
+is because at one query or procedure there are rows that have not been read or some procedure has gotten stuck (it happens a lot with procedures, don't know why yet)
+Solution: After detected the query that gives the error add (suposing $res is the result of your query and $connection your connection to mysql)
+$res->close();
+$connection->next_result();
+
+
+*Enumerate sorted rows with update:
+update students set listNum=(select count(*) from students as tmpStudents where tmpStudents.curp <= students.curp)
+-- "tmpStudents" is like a temporary table because on update or on delete you can't make querys to the actual table
+-- so you gotta make a "temporary" table
+
+
+*Erase tables with temporary key
+-- temporal workaround to erase test tables blocked by a foreign key error
+set FOREIGN_KEY_CHECKS=0;
+drop table tableToDrop;
+set FOREIGN_KEY_CHECKS=1;
+
+
+*Get cant of repeated matches in a table
+select word, Count(*) as count from uncommonWords group by word order by count;
+
+
+*On update / On delete actions
+CASCADE:
+ will propagate the change when the parent changes. (If you delete a row, rows in constrained tables that reference that row will also be deleted, etc.) Also, note that cascading foreign key actions do not activate triggers in MySQL.
+
+SET NULL:
+ sets the column value to NULL when a parent row goes away.
+
+RESTRICT:
+causes the attempted DELETE of a parent row to fail.
+
+NO ACTION: 
+is equivalent to RESTRICT. 
+
+
+*Procedures-Functions-IF statements
+DELIMITER //
+create procedure exist(in _usr varchar(32))
+begin
+if (select count(usr) from users where usr=_usrs)=1
+then select 1;
+else select 0;
+end if;
+end//
+call existUser("User");

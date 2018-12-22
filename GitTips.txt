@@ -1,17 +1,20 @@
-Tutorial 1:
 Git add-commit-track stuff
-Note -> Exit from comand line editor with Q
-Note -> To use notepad instead vim on bash use
+Note 1 -> Exit from comand line editor with Q
+
+Note 2 -> To use notepad instead vim on bash use
 $ alias notepad="/c/Program\ Files/Notepad++/notepad++.exe"
 so you can open files like
 $ notepad filePath
-Note -> Add new/untracked files
+
+Note 3 -> Add new/untracked files
 $ git add -i
 Type a (for "add untracked"), then * (for "all"), then q (to quit) and you're done
 
+Tutorial 1:
+Configuring git:
 *(Only once) Add who adds each commit
-$ git config --global user.name "DT3264"
-$ git config --global user.email "cernadaniel32@gmail.com"
+$ git config --global user.name "UserName"
+$ git config --global user.email "your@email"
 
 *Create a new repo
 $ git init
@@ -51,7 +54,6 @@ $ git log [params]
 --pretty=format:"%h : %an : %ar : %s" -> like printf, params can be ignored ggg, h -> hash / an -> author / ar -> time from that commit / s -> commit
 -p -n -> -p is for file modifications -n is for the last n commits
 
-
 --------------------------
 Tutorial 2:
 Create and sync a GitHub repo
@@ -64,25 +66,29 @@ Create a repo in GitHub and then ->
 *Create a local repo (in case it doesn't exist yet)
 $ git init
 
-*Add all the files in the directory (there's should be something, like a dummy or the readMe
-$ git add .
-
 *Set the online repo
 $ git remote add origin "Link_To_The_Repo"
-
-*Commit to the master repo (There's should be something to commit) / If it's first time it should request email and password
-$ git push -u origin master
-master -> the actual branch we're pushing to the commits, could be the the master branch or a custom branch
-
-*List remote urls (can show other branches)
-$ git remote [params]
--v the posible things to do in origin
 
 *To get the data without mergin it with a local copy yet
 $ git fetch origin
 
 *To get the up to date proyect from the online repo is 
 $ git pull origin
+
+*Add all the unstaged files in the directory 
+$ git add .
+or with the commands at the very top on notes
+
+*First push should be like this (If it's first time it should request email and password)
+$ git push -u origin master
+-u -> Sets origin as the remote to recieve the push at the master branch
+
+*Push commits to the actual branch(There's should be something to commit)
+$ git push
+
+*List remote urls (can show other branches)
+$ git remote [params]
+-v the posible things to do in origin
 
 *To push the local modifications (after commited the files)
 $ git push
